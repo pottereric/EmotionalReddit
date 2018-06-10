@@ -23,16 +23,16 @@ namespace EmotionalReddit.MVC.Controllers
         }
         public IActionResult Index()
         {
-            HomeViewModel homeVM = BuildViewModelForSubreddit("programming");
+            HomeViewModel homeVM = BuildViewModelForSubreddit("programming", 0.7);
             return View(homeVM);
         }
 
-        private HomeViewModel BuildViewModelForSubreddit(string subredditName)
+        private HomeViewModel BuildViewModelForSubreddit(string subredditName, double sentimentFilterLevel)
         {
-            var homeVM = new HomeViewModel();
+            var homeVM = new HomeViewModel() { SubRedditName = subredditName, SentimentFilter = (int)sentimentFilterLevel * 10 };
             var cogSerKey = _configuration["CogSerKey:InstrumentationKey"];
 
-            var redditItems = _redditSentiment.GetRedditItemSentimentModels(cogSerKey, subredditName);
+            var redditItems = _redditSentiment.GetRedditItemSentimentModels(cogSerKey, subredditName, sentimentFilterLevel);
 
             foreach (var f in redditItems)
             {
@@ -45,7 +45,7 @@ namespace EmotionalReddit.MVC.Controllers
         [HttpPost]
         public IActionResult Update(HomeViewModel vm)
         {
-            HomeViewModel homeVM = BuildViewModelForSubreddit(vm.SubRedditName);
+            HomeViewModel homeVM = BuildViewModelForSubreddit(vm.SubRedditName, vm.SentimentFilterLevel);
             return View("Index", homeVM);
         }
 

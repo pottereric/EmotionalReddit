@@ -8,14 +8,29 @@ namespace EmotionalReddit.MVC.Services
 {
     public class RedditSentiment : IRedditSentiment
     {
-        public IEnumerable<RedditItemSentimentModel> GetRedditItemSentimentModels(string cogSerKey, string subredditName)
+        public IEnumerable<RedditItemSentimentModel> GetRedditItemSentimentModels(string cogSerKey, string subredditName, double sentimentFilterLevel)
         {
             var redditTitlesWithSentiment = EmotionalReddit.RedditSentimentAnalyzer.RedditSentiment.getSentimentAndTitlesForsubreddit(
                 cogSerKey, subredditName, "top");
 
-            var positiveTitles = redditTitlesWithSentiment.Where(i => i.Sentiment.Value > 0.5);
+            IEnumerable<RedditSentimentAnalyzer.RedditSentiment.RedditTitleSentiment> filteredTitles;
 
-            var results = positiveTitles.Select(t => new RedditItemSentimentModel() { Title = t.Title, Score = t.Votes, Sentiment = t.Sentiment.Value });
+            if(sentimentFilterLevel < .5)
+            {
+                filteredTitles = redditTitlesWithSentiment.Where(i => i.Sentiment.Value < sentimentFilterLevel);
+            }
+            else if(sentimentFilterLevel > .5)
+            {
+                filteredTitles = redditTitlesWithSentiment.Where(i => i.Sentiment.Value > sentimentFilterLevel);
+            }
+            else
+            {
+                filteredTitles = redditTitlesWithSentiment;
+            }
+            
+            
+
+            var results = filteredTitles.Select(t => new RedditItemSentimentModel() { Title = t.Title, Score = t.Votes, Sentiment = t.Sentiment.Value });
             return results;
                 
         }

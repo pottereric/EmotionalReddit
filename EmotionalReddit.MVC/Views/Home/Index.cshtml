@@ -6,7 +6,10 @@
 @Model.SubRedditName
 <form asp-controller="Home" asp-action="Update" method="post">
     Subreddit Name:  <input asp-for="SubRedditName" /> <br />
-    <button type="submit">Register</button>
+    <label for="fader">Sentiment</label>
+    @*<input type="range" min="0" max="5" value="3" id="fader">*@
+    <input asp-for="SentimentFilter" type="range" min="0" max="10" id="fader" />
+    <button type="submit">Go</button>
 </form>
 
 @foreach(var item in Model.RedditItems)
