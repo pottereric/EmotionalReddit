@@ -5,7 +5,7 @@ open FSharp.Data
 type RedditProvider = JsonProvider<"SampleData\SampleRedditData.json">
 
 let GetTitles subreddit sort = 
-    let redditUrl = sprintf "%s/%s/%s.json" "https://www.reddit.com/r" subreddit sort
+    let redditUrl = sprintf "%s/%s/%s.json?limit=50" "https://www.reddit.com/r" subreddit sort
     let json = RedditProvider.Load(redditUrl)
     //let json = RedditProvider.GetSample()
     json.Data.Children 
