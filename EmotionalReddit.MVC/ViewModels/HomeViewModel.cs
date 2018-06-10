@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace EmotionalReddit.MVC.ViewModels
 {
+
     public class HomeViewModel
     {
         private List<RedditItemViewModel> _redditItems;
