@@ -7,7 +7,7 @@
 
 @foreach(var item in Model.RedditItems)
 {
-    <p>Happy Reddit Item: @item.Title</p>
+    <div>@item.Score (@item.Sentiment): <b><a href="@item.StoryUrl">@item.Title</a></b> <a href="@item.DiscussionUrl">discuss</a></div>
 
 }
 
