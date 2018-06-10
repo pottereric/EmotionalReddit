@@ -29,5 +29,7 @@ namespace EmotionalReddit.MVC.ViewModels
 
             _redditItems.Add(redditItem);
         }
+
+        public string SubRedditName { get; set; }
     }
 }

@@ -23,17 +23,30 @@ namespace EmotionalReddit.MVC.Controllers
         }
         public IActionResult Index()
         {
+            HomeViewModel homeVM = BuildViewModelForSubreddit("programming");
+            return View(homeVM);
+        }
+
+        private HomeViewModel BuildViewModelForSubreddit(string subredditName)
+        {
             var homeVM = new HomeViewModel();
             var cogSerKey = _configuration["CogSerKey:InstrumentationKey"];
 
-            var redditItems = _redditSentiment.GetRedditItemSentimentModels(cogSerKey);
+            var redditItems = _redditSentiment.GetRedditItemSentimentModels(cogSerKey, subredditName);
 
             foreach (var f in redditItems)
             {
                 homeVM.AddRedditItem(f.Title, f.Score, f.Sentiment, f.LinkUrl, f.DiscussionUrl);
             }
 
-            return View(homeVM);
+            return homeVM;
+        }
+
+        [HttpPost]
+        public IActionResult Update(HomeViewModel vm)
+        {
+            HomeViewModel homeVM = BuildViewModelForSubreddit(vm.SubRedditName);
+            return View("Index", homeVM);
         }
 
         public IActionResult About()

@@ -8,7 +8,7 @@ namespace EmotionalReddit.MVC.Services.Stubs
 {
     public class RedditSentimentStub : IRedditSentiment
     {
-        public IEnumerable<RedditItemSentimentModel> GetRedditItemSentimentModels(string cogSerKey)
+        public IEnumerable<RedditItemSentimentModel> GetRedditItemSentimentModels(string cogSerKey, string subredditName)
         {
             return new List<RedditItemSentimentModel>(){
                 new RedditItemSentimentModel() { Title = "Stub Title 1", Score = 100, Sentiment = 0.1, LinkUrl = "https://www.reddit.com/r/programming/", DiscussionUrl = "https://www.reddit.com/r/programming/comments/8pt6qe/the_hardest_program_ive_ever_written/"},

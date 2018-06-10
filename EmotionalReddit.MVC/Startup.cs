@@ -35,8 +35,8 @@ namespace EmotionalReddit.MVC
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IConfiguration>(Configuration);
-            //services.AddScoped<IRedditSentiment, RedditSentiment>();
-            services.AddScoped<IRedditSentiment, RedditSentimentStub>();
+            services.AddScoped<IRedditSentiment, RedditSentiment>();
+            //services.AddScoped<IRedditSentiment, RedditSentimentStub>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
