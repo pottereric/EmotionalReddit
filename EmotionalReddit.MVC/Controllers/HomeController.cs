@@ -8,6 +8,7 @@ using EmotionalReddit.MVC.Models;
 using EmotionalReddit.MVC.ViewModels;
 using Microsoft.Extensions.Configuration;
 using EmotionalReddit.MVC.Services;
+using Microsoft.ApplicationInsights;
 
 namespace EmotionalReddit.MVC.Controllers
 {
@@ -29,6 +30,8 @@ namespace EmotionalReddit.MVC.Controllers
 
         private HomeViewModel BuildViewModelForSubreddit(string subredditName, double sentimentFilterLevel)
         {
+            TrackTelemetryOfRequest(subredditName, sentimentFilterLevel);
+
             var homeVM = new HomeViewModel() { SubRedditName = subredditName, SentimentFilter = (int)sentimentFilterLevel * 10 };
             var cogSerKey = _configuration["CogSerKey:InstrumentationKey"];
 
@@ -40,6 +43,16 @@ namespace EmotionalReddit.MVC.Controllers
             }
 
             return homeVM;
+        }
+
+        private void TrackTelemetryOfRequest(string subredditName, double sentimentFilterLevel)
+        {
+            var telemetryData = new Dictionary<string, string>();
+            telemetryData.Add("subredditName", subredditName);
+            telemetryData.Add("sentimentFilterLevel", sentimentFilterLevel.ToString());
+            var telemetryClient = new TelemetryClient();
+            telemetryClient.InstrumentationKey = _configuration["ApplicationInsights:InstrumentationKey"]; ;
+            telemetryClient.TrackEvent("GeneratingRedditView", telemetryData);
         }
 
         [HttpPost]
