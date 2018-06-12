@@ -4,9 +4,14 @@
 }
 
 <form asp-controller="Home" asp-action="Index" method="post">
-    Subreddit Name:  <input asp-for="SubRedditName" /> <br />
+    <label>Subreddit Name:  </label> <br />
+    <input asp-for="SubRedditName" /> <br /><br />
     <label for="fader">Sentiment</label>
-    <input asp-for="SentimentFilter" type="range" min="0" max="10" id="fader" />
+    <div style="white-space:nowrap;">
+        <span style="display:inline-block;position:relative;top:-8px">More Negative</span>
+        <input asp-for="SentimentFilter" type="range" min="0" max="10" id="fader" style="width:50%;display:inline-block" />
+        <span style="display:inline-block;position:relative;top:-8px">More Positive</span>
+    </div>
     <button type="submit">Go</button>
 </form>
 
