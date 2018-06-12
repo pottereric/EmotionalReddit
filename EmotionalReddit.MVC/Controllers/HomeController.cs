@@ -28,6 +28,20 @@ namespace EmotionalReddit.MVC.Controllers
             return View(homeVM);
         }
 
+        [Route("/r/{subreddit}")]
+        public IActionResult Index(string subreddit)
+        {
+            HomeViewModel homeVM = BuildViewModelForSubreddit(subreddit, 0.7);
+            return View(homeVM);
+        }
+
+        [HttpPost]
+        public IActionResult Index(HomeViewModel vm)
+        {
+            HomeViewModel homeVM = BuildViewModelForSubreddit(vm.SubRedditName, vm.SentimentFilterLevel);
+            return View(homeVM);
+        }
+
         private HomeViewModel BuildViewModelForSubreddit(string subredditName, double sentimentFilterLevel)
         {
             TrackTelemetryOfRequest(subredditName, sentimentFilterLevel);
@@ -55,12 +69,7 @@ namespace EmotionalReddit.MVC.Controllers
             telemetryClient.TrackEvent("GeneratingRedditView", telemetryData);
         }
 
-        [HttpPost]
-        public IActionResult Update(HomeViewModel vm)
-        {
-            HomeViewModel homeVM = BuildViewModelForSubreddit(vm.SubRedditName, vm.SentimentFilterLevel);
-            return View("Index", homeVM);
-        }
+       
 
         public IActionResult About()
         {
