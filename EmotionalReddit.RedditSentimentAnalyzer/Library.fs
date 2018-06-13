@@ -7,7 +7,7 @@ module Say =
     let Foo () =
         Reddit.GetTopProgrammingTitles()
         |> List.map(fun t ->
-            let text, score = t
+            let text, score, linkUrl, discussionUrl = t
             text)
     //let Foo =
     //    [

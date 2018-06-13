@@ -12,7 +12,27 @@ namespace EmotionalReddit.MVC.ViewModels
         public int Score { get; set; }
         public double Sentiment { get; set; }
         public string StoryUrl { get; set; }
-        public string DiscussionUrl { get; set; }
+
+        private string _discussionUrl;
+        public string DiscussionUrl
+        {
+            get
+            {
+                string redditBaseUrl = "https://www.reddit.com";
+                if (_discussionUrl.StartsWith(redditBaseUrl))
+                {
+                    return _discussionUrl;
+                }
+                else
+                {
+                    return $"{redditBaseUrl}{_discussionUrl}";
+                }
+            }
+            set
+            {
+                _discussionUrl = value;
+            }
+        }
 
         public RedditItemViewModel()
         {

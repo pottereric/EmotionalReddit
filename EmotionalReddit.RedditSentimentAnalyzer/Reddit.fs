@@ -10,7 +10,7 @@ let GetTitles subreddit sort =
     //let json = RedditProvider.GetSample()
     json.Data.Children 
     |> Seq.toList
-    |> List.map (fun p -> (p.Data.Title, p.Data.Score))
+    |> List.map (fun p -> (p.Data.Title, p.Data.Score, p.Data.Url, p.Data.Permalink))
 
 let GetTopProgrammingTitles _ =
     GetTitles "programming" "top"

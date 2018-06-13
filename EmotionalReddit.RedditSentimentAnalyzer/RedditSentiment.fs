@@ -6,11 +6,13 @@ module RedditSentiment =
         { Votes: int
           Title: string
           Sentiment: float option
+          LinkUrl: string
+          DiscussionUrl: string
         }
 
     let convertTitlesToInputs titles =
         titles |> List.mapi (fun i t -> 
-            let text, score = t
+            let text, score, linkUrl, discussionUrl = t
             "en", i.ToString(), text)
 
 
@@ -24,8 +26,8 @@ module RedditSentiment =
         let sentiments = result.Documents |> Seq.map(fun d -> d.Id, (d.Score |> Option.ofNullable)) |> List.ofSeq
         let combinedLists = List.zip3 titles inputs sentiments
         combinedLists |> List.map(fun item -> 
-            let (text, score),(lang, id, title), (id2, sent) = item
-            {Votes = score; Title = text; Sentiment = sent}
+            let (text, score, linkUrl, discussionUrl),(lang, id, title), (id2, sent) = item
+            {Votes = score; Title = text; Sentiment = sent; LinkUrl = linkUrl; DiscussionUrl = discussionUrl }
         )
 
 

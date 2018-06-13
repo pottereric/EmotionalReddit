@@ -30,7 +30,8 @@ namespace EmotionalReddit.MVC.Services
             
             
 
-            var results = filteredTitles.Select(t => new RedditItemSentimentModel() { Title = t.Title, Score = t.Votes, Sentiment = t.Sentiment.Value });
+            var results = filteredTitles.Select(t => new RedditItemSentimentModel() {
+                Title = t.Title, Score = t.Votes, Sentiment = t.Sentiment.Value, LinkUrl = t.LinkUrl, DiscussionUrl = t.DiscussionUrl });
             return results;
                 
         }
