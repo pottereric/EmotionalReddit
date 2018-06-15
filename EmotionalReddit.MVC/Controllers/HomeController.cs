@@ -28,6 +28,14 @@ namespace EmotionalReddit.MVC.Controllers
             return View(homeVM);
         }
 
+        [HttpPost]
+        public IActionResult Index(HomeViewModel vm)
+        {
+            HomeViewModel homeVM = BuildViewModelForSubreddit(vm.SubRedditName, vm.SentimentFilterLevel);
+            return View(homeVM);
+        }
+
+        [HttpGet]
         [Route("/r/{subreddit}")]
         public IActionResult Index(string subreddit)
         {
@@ -36,27 +44,37 @@ namespace EmotionalReddit.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(HomeViewModel vm)
+        [Route("/r/{subreddit}")]
+        public IActionResult Index(string subreddit, HomeViewModel vm)
         {
-            HomeViewModel homeVM = BuildViewModelForSubreddit(vm.SubRedditName, vm.SentimentFilterLevel);
+            HomeViewModel homeVM = BuildViewModelForSubreddit(subreddit, vm.SentimentFilterLevel);
             return View(homeVM);
         }
 
+
         private HomeViewModel BuildViewModelForSubreddit(string subredditName, double sentimentFilterLevel)
         {
-            TrackTelemetryOfRequest(subredditName, sentimentFilterLevel);
-
-            var homeVM = new HomeViewModel() { SubRedditName = subredditName, SentimentFilter = (int)sentimentFilterLevel * 10 };
-            var cogSerKey = _configuration["CogSerKey:InstrumentationKey"];
-
-            var redditItems = _redditSentiment.GetRedditItemSentimentModels(cogSerKey, subredditName, sentimentFilterLevel);
-
-            foreach (var f in redditItems)
+            try
             {
-                homeVM.AddRedditItem(f.Title, f.Score, f.Sentiment, f.LinkUrl, f.DiscussionUrl);
-            }
+                TrackTelemetryOfRequest(subredditName, sentimentFilterLevel);
 
-            return homeVM;
+                var homeVM = new HomeViewModel() { SubRedditName = subredditName, SentimentFilter = (int)(sentimentFilterLevel * 10) };
+                var cogSerKey = _configuration["CogSerKey:InstrumentationKey"];
+
+                var redditItems = _redditSentiment.GetRedditItemSentimentModels(cogSerKey, subredditName, sentimentFilterLevel);
+
+                foreach (var f in redditItems)
+                {
+                    homeVM.AddRedditItem(f.Title, f.Score, f.Sentiment, f.LinkUrl, f.DiscussionUrl);
+                }
+
+                return homeVM;
+            }
+            catch (Exception ex)
+            {
+                // TODO log error or display error
+                return new HomeViewModel() { SubRedditName = subredditName, SentimentFilter = (int)(sentimentFilterLevel * 10) };
+            }
         }
 
         private void TrackTelemetryOfRequest(string subredditName, double sentimentFilterLevel)
