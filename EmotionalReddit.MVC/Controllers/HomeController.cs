@@ -47,7 +47,9 @@ namespace EmotionalReddit.MVC.Controllers
         [Route("/r/{subreddit}")]
         public IActionResult Index(string subreddit, HomeViewModel vm)
         {
-            HomeViewModel homeVM = BuildViewModelForSubreddit(subreddit, vm.SentimentFilterLevel);
+            string subredditName = String.IsNullOrWhiteSpace(vm.SubRedditName) ?
+                                    subreddit : vm.SubRedditName;
+            HomeViewModel homeVM = BuildViewModelForSubreddit(subredditName, vm.SentimentFilterLevel);
             return View(homeVM);
         }
 
